@@ -8,6 +8,8 @@ export const useCounterStore = defineStore("counter", {
     nada: "Prueba de state",
     token: "",
     isAuthenticated: false,
+    ejex: [],
+    ejey: [],
   }),
   getters: {
     doubleCount: (state) => state.counter * 2,
@@ -37,11 +39,10 @@ export const useCounterStore = defineStore("counter", {
       if (token) {
         this.token = token;
         this.isAuthenticated = true;
-        window.localStorage.setItem("token", (token));
+        window.localStorage.setItem("token", token);
 
         api.defaults.headers.common.Authorization =
           "Bearer " + JSON.parse(token);
-
 
         // dispatch("getMe", JSON.parse(token));
       } else {
@@ -50,6 +51,4 @@ export const useCounterStore = defineStore("counter", {
       console.log("init");
     },
   },
-
-
 });

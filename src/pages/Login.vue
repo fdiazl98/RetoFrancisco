@@ -39,7 +39,7 @@
         <q-card-section>
           <q-form class="q-gutter-md" @submit.prevent="submitForm">
             <q-input label="Username" v-model="login.username"> </q-input>
-            <q-input label="Password" type="password" v-model="login.password">
+            <q-input label="Password" v-model="login.password">
             </q-input>
             <div>
               <q-btn
@@ -101,7 +101,7 @@ export default {
         });
       } else {
         $q.localStorage.set("username", this.login.username);
-        // $q.localStorage.set("password", JSON.stringify(this.login.password));
+        $q.localStorage.set("password", JSON.stringify(this.login.password));
         try {
           await api.post("/api/Login", this.login).then((response) => {
             const prueba = response.data.token;

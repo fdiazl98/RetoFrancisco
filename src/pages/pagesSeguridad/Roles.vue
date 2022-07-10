@@ -45,10 +45,10 @@
                   {{ col.value }}
                 </div>
                 <div v-show="col.name == 'estado' && col.value == '1'">
-                  <p>Activo</p>
+                  <q-badge color="green"> Activo </q-badge>
                 </div>
                 <div v-show="col.name == 'estado' && col.value == '2'">
-                  <p>Inactivo</p>
+                  <q-badge color="red"> Inactivo </q-badge>
                 </div>
               </q-td>
               <q-td auto-width></q-td>

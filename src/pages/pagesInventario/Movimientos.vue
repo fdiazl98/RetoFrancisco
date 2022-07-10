@@ -18,10 +18,8 @@
       :columns="columns"
       row-key="name"
       :visible-columns="visibleColumns"
-
     >
       <template v-slot:top="props">
-
         <div class="col-2 q-table__title">Movimientos</div>
 
         <q-space />
@@ -80,21 +78,21 @@
       </template>
 
       <template v-slot:body="props">
-            <q-tr @click="clickRow(props.row)">
-              <q-td v-for="col in props.cols" :key="col.name" :props="props">
-                <div v-show="col.name != 'estado'">
-                  {{ col.value }}
-                </div>
-                <div v-show="col.name == 'estado' && col.value == '1'">
-                  <p>Activo</p>
-                </div>
-                <div v-show="col.name == 'estado' && col.value == '2'">
-                  <p>Inactivo</p>
-                </div>
-              </q-td>
-              <q-td auto-width></q-td>
-            </q-tr>
-          </template>
+        <q-tr @click="clickRow(props.row)">
+          <q-td v-for="col in props.cols" :key="col.name" :props="props">
+            <div v-show="col.name != 'estado'">
+              {{ col.value }}
+            </div>
+            <div v-show="col.name == 'estado' && col.value == '1'">
+              <q-badge color="green"> Activo </q-badge>
+            </div>
+            <div v-show="col.name == 'estado' && col.value == '2'">
+              <q-badge color="red"> Inactivo </q-badge>
+            </div>
+          </q-td>
+          <q-td auto-width></q-td>
+        </q-tr>
+      </template>
     </q-table>
 
     <q-dialog v-model="mostrarModal">
@@ -173,6 +171,7 @@
 <script>
 import { api } from "boot/axios";
 import { ref } from "vue";
+import { useCounterStore } from 'stores/example-store'
 
 const columns = [
   {
@@ -240,6 +239,7 @@ let condition;
 
 export default {
   setup() {
+    // const store = useCounterStore()
     return {
       visibleColumns: ref([
         "fechahora",
@@ -268,6 +268,7 @@ export default {
   },
 
   data() {
+
     return {
       listado: [],
 
@@ -285,10 +286,12 @@ export default {
       mostrarModal: false,
       accion: "",
       ver: false,
+
     };
   },
 
   methods: {
+
     clickRow(row) {
       // showEdit.value = false;
       // console.log(row);
@@ -311,13 +314,32 @@ export default {
     },
 
     async submitForm() {
+      const store = useCounterStore()
       await api.get("api/Movimiento/get").then((response) => {
         // console.log(
         //   "0========================prueba============================"
         // );
-        // console.log(response.data);
-        return (this.listado = response.data);
+
+        this.listado = response.data;
+        // console.log("viendo data de prueba : " + JSON.stringify(this.listado));
       });
+
+      var arr = [];
+      var arr2 = [];
+
+      this.listado.forEach((value, index) => {
+        arr.push(value.id);
+        arr2.push(value.cantidad);
+
+        // console.log(value);
+      });
+      console.log(arr);
+      console.log(arr2);
+
+      store.ejex=arr
+      console.log(store.ejex)
+      store.ejey=arr2
+      console.log(store.ejey)
 
       // rows=lista
     },
