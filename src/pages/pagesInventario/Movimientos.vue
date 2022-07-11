@@ -171,7 +171,7 @@
 <script>
 import { api } from "boot/axios";
 import { ref } from "vue";
-import { useCounterStore } from 'stores/example-store'
+import { useCounterStore } from "stores/example-store";
 
 const columns = [
   {
@@ -268,7 +268,6 @@ export default {
   },
 
   data() {
-
     return {
       listado: [],
 
@@ -286,12 +285,10 @@ export default {
       mostrarModal: false,
       accion: "",
       ver: false,
-
     };
   },
 
   methods: {
-
     clickRow(row) {
       // showEdit.value = false;
       // console.log(row);
@@ -314,7 +311,7 @@ export default {
     },
 
     async submitForm() {
-      const store = useCounterStore()
+      const store = useCounterStore();
       await api.get("api/Movimiento/get").then((response) => {
         // console.log(
         //   "0========================prueba============================"
@@ -336,10 +333,10 @@ export default {
       console.log(arr);
       console.log(arr2);
 
-      store.ejex=arr
-      console.log(store.ejex)
-      store.ejey=arr2
-      console.log(store.ejey)
+      store.ejex = arr;
+      console.log(store.ejex);
+      store.ejey = arr2;
+      console.log(store.ejey);
 
       // rows=lista
     },
@@ -385,6 +382,9 @@ export default {
   },
   mounted() {
     this.submitForm();
+  },
+  beforeCreate() {
+    console.log("antes de crear")
   },
 };
 </script>
