@@ -32,7 +32,7 @@ export default {
 import { defineComponent, defineAsyncComponent } from "vue";
 
 const chartExample = defineAsyncComponent(() =>
-  import("src/components/charts/mychart_example.vue")
+  import("src/components/chartsExample/mychart_example.vue")
 );
 
 export default defineComponent({

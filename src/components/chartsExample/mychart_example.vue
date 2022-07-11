@@ -8,10 +8,9 @@
 </template>
 
 <script>
-import { useCounterStore } from 'stores/example-store'
-const store = useCounterStore()
+import { useCounterStore } from "stores/example-store";
+const store = useCounterStore();
 export default {
-
   name: "mychar_example",
   data() {
     return {
@@ -22,6 +21,13 @@ export default {
         },
       ],
       chartOptions: {
+           title: {
+          text: "cantidad por Id(Movimientos)",
+
+          align: "center",
+
+
+        },
         chart: {
           height: 350,
           type: "bar",
@@ -37,7 +43,7 @@ export default {
         dataLabels: {
           enabled: true,
           formatter: function (val) {
-            return val ;
+            return val;
           },
           offsetY: -20,
           style: {
@@ -47,7 +53,7 @@ export default {
         },
 
         xaxis: {
-          categories:store.ejex,
+          categories: store.ejex,
           position: "top",
           axisBorder: {
             show: false,
@@ -85,15 +91,7 @@ export default {
             },
           },
         },
-        title: {
-          text: "cantidad por Id(Movimientos)",
-          floating: true,
-          offsetY: 330,
-          align: "center",
-          style: {
-            color: "#444",
-          },
-        },
+
       },
     };
   },

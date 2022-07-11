@@ -10,6 +10,7 @@ export const useCounterStore = defineStore("counter", {
     isAuthenticated: false,
     ejex: [],
     ejey: [],
+    estadoVector:[]
   }),
   getters: {
     doubleCount: (state) => state.counter * 2,

@@ -161,6 +161,15 @@
             </q-expansion-item>
           </q-list>
           <!-- fin inventario -->
+
+
+          <q-item clickable v-ripple to="/Dashboard" active-class="my-menu-link">
+            <q-item-section avatar>
+              <q-icon name="leaderboard" />
+            </q-item-section>
+
+            <q-item-section> Dashboard </q-item-section>
+          </q-item>
         </q-list>
       </q-scroll-area>
 

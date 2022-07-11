@@ -21,7 +21,19 @@
         <template v-slot:body="props">
           <q-tr @click="clickRow(props.row)">
             <q-td v-for="col in props.cols" :key="col.name" :props="props">
-              <div v-show="col.name != 'foto'">
+              <div
+                v-show="col.name != 'foto'"
+                v-if="col.name == 'estado' && col.value == '1'"
+              >
+                <q-badge color="green"> Activo </q-badge>
+              </div>
+              <div
+                v-show="col.name != 'foto'"
+                v-if="col.name == 'estado' && col.value == '2'"
+              >
+                 <q-badge color="red"> Inactivo </q-badge>
+              </div>
+              <div v-show="col.name != 'foto'" v-if="col.name != 'estado'">
                 {{ col.value }}
               </div>
               <div v-show="col.name == 'foto'">
@@ -58,6 +70,14 @@
             <q-input filled v-model="fila.idCategoria" label="Id Categoria" />
             <q-input filled v-model="fila.preciocompra" label="Precio Compra" />
             <q-input filled v-model="fila.precioventa" label="Precio Venta" />
+            <q-select
+              filled
+              v-model="fila.estado"
+              :options="options"
+              label="Estado"
+              map-options
+              emit-value
+            />
 
             <div>
               <q-btn :label="accion" color="primary" type="submit" />
@@ -81,7 +101,7 @@
 const columns = [
   {
     name: "id",
-    label: "Id de articulo",
+    label: "Id",
     align: "center",
     field: "id",
     sortable: true,
@@ -89,7 +109,7 @@ const columns = [
   {
     name: "codigo",
     required: true,
-    label: "codigo articulo",
+    label: "Codigo",
     align: "center",
     field: "codigo",
     sortable: true,
@@ -143,6 +163,13 @@ const columns = [
     field: "precioventa",
     sortable: true,
   },
+  {
+    name: "estado",
+    label: "Estado",
+    align: "center",
+    field: "estado",
+    sortable: true,
+  },
 ];
 
 import { useQuasar } from "quasar";
@@ -158,6 +185,16 @@ export default {
       columns,
       date: "",
       search: "",
+      options: [
+        {
+          label: "Activo",
+          value: 1,
+        },
+        {
+          label: "Inactivo",
+          value: 2,
+        },
+      ],
     };
   },
   data() {
@@ -174,6 +211,7 @@ export default {
         precioventa: null,
         fechacreacion: "",
         fechamodificacion: "",
+        estado: "",
       },
       accion: "",
       mostrarModal: false,
@@ -207,6 +245,7 @@ export default {
             precioventa: null,
             fechacreacion: "",
             fechamodificacion: "",
+            estado: "",
           };
           this.mostrarModal = false;
         });
@@ -224,6 +263,7 @@ export default {
         precioventa: null,
         fechacreacion: "",
         fechamodificacion: "",
+        estado: "",
       };
     },
     clickRow(row) {
@@ -240,6 +280,7 @@ export default {
         idCategoria: row.idCategoria,
         preciocompra: row.preciocompra,
         precioventa: row.precioventa,
+        estado: row.estado,
       };
     },
   },

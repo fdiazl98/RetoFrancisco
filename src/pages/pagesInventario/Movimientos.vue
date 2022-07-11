@@ -100,7 +100,7 @@
         <div class="q-pa-md" style="max-width: 600px">
           <h5 style="width: 500px">{{ accion }}</h5>
           <q-form class="q-gutter-md" @submit.prevent="cambio">
-            <q-input filled v-model="fila.id" label="Id" :disable="ver" />
+            <q-input filled v-model="fila.id" label="Id" :disable="ver" type="number" />
 
             <q-input
               filled
@@ -323,10 +323,12 @@ export default {
 
       var arr = [];
       var arr2 = [];
+      var estadoV = [];
 
       this.listado.forEach((value, index) => {
         arr.push(value.id);
         arr2.push(value.cantidad);
+        estadoV.push(value.estado);
 
         // console.log(value);
       });
@@ -337,6 +339,8 @@ export default {
       console.log(store.ejex);
       store.ejey = arr2;
       console.log(store.ejey);
+      store.estadoVector = estadoV;
+      console.log(store.estadoVector);
 
       // rows=lista
     },
@@ -380,11 +384,11 @@ export default {
       this.condition = "";
     },
   },
-  mounted() {
+  created() {
     this.submitForm();
   },
   beforeCreate() {
-    console.log("antes de crear")
+    console.log("antes de crear");
   },
 };
 </script>

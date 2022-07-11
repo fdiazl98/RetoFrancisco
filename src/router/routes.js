@@ -20,6 +20,13 @@ const routes = [
         meta: { requireLogin: true },
       },
 
+
+      {
+        path: "Dashboard",
+        component: () => import("pages/Dashboard.vue"),
+        meta: { requireLogin: true },
+      },
+
       //paginas de configuraciones
       {
         path: "/configuracion/categorias",
