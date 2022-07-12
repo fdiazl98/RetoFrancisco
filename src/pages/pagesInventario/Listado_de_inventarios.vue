@@ -6,7 +6,15 @@
         type="submit"
         color="primary"
         margin-top="10px"
-        @click="(mostrarModal = true), (condition = -1), (accion = 'Crear')"
+        @click="
+          (mostrarModal = true),
+            (condition = -1),
+            (accion = 'Agregar'),
+            (verid = false),
+            (fila = {
+              fechaultimomovimiento: null,
+            })
+        "
       />
       <q-table
         class="gutter-md"
@@ -41,6 +49,7 @@
             <q-input filled v-model="fila.saldo" label="Saldo" type="number" />
 
             <q-input
+              v-show="false"
               filled
               v-model="fila.fechaultimomovimiento"
               hint="Fecha ultimo movimiento"
@@ -108,6 +117,7 @@ import { useQuasar } from "quasar";
 import { ref } from "vue";
 // import { mapActions } from "vuex";
 import { api } from "boot/axios";
+let $q = useQuasar();
 
 export default {
   setup() {
@@ -172,12 +182,25 @@ export default {
       );
       if (this.condition == -1) {
         // return editar='crear'
-        this.accion = "Crear";
+        this.accion = "Agregar";
 
         this.mostrarModal = true;
+
         await api.post("api/Inventario/Crear", this.fila).then((response) => {
           console.log(response);
           this.submitForm();
+
+          if (response.data.codigomensaje == "223") {
+            $q.notify({
+              type: "negative",
+              message: "Error, el registro ya existe",
+            });
+          } else {
+            $q.notify({
+              type: "positive",
+              message: "Registro creado!",
+            });
+          }
         });
         this.fila = {
           idArticulo: "",
@@ -200,7 +223,6 @@ export default {
               fechaultimomovimiento: "",
             };
             this.submitForm();
-
           });
       }
       this.mostrarModal = false;
@@ -208,6 +230,7 @@ export default {
     },
   },
   mounted() {
+    $q = useQuasar();
     this.submitForm();
   },
 };

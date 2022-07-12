@@ -106,6 +106,13 @@
 
 <script>
 const columns = [
+    {
+    name: "id",
+    label: "Id",
+    align: "center",
+    field: "id",
+    sortable: true,
+  },
   {
     name: "codigo",
     required: true,
@@ -142,13 +149,7 @@ const columns = [
     field: "foto",
     sortable: true,
   },
-  {
-    name: "id",
-    label: "Id de articulo",
-    align: "center",
-    field: "id",
-    sortable: true,
-  },
+
   {
     name: "estado",
     label: "Estado",
@@ -266,6 +267,6 @@ export default {
 img {
   border-radius: 4px;
   padding: 5px;
-  width: 150px;
+  width: 100px;
 }
 </style>

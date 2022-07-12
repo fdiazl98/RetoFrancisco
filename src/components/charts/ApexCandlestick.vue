@@ -29,13 +29,13 @@ export default defineComponent({
           id: "apex-column",
         },
         colors: [
-          getCssVar("primary"),
-          getCssVar("secondary"),
           getCssVar("negative"),
+          getCssVar("secondary"),
+          getCssVar("primary"),
         ],
         xaxis: {
           categories: [],
-           title: {
+          title: {
             text: "Codigo",
           },
         },
@@ -59,7 +59,7 @@ export default defineComponent({
         dataLabels: {
           enabled: true,
           formatter: function (val) {
-            return ;
+            return;
           },
           offsetY: -20,
           style: {
@@ -84,7 +84,7 @@ export default defineComponent({
         // console.log("viendo data de prueba : " + JSON.stringify(this.listado));
       });
       var arr2 = [];
-       var arr3 = [];
+      var arr3 = [];
 
       let i = 0;
       this.listado.forEach((value) => {

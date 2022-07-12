@@ -10,7 +10,12 @@
           (mostrarModal = true),
             (condition = -1),
             (accion = 'Crear'),
-            (ver = false)
+            (ver = false),
+            (fila = {
+              fechacreacion: null,
+              fechamodificacion: null,
+              ultimologin: null,
+            })
         "
       />
       <q-table
@@ -20,25 +25,23 @@
         :rows="listado"
         :columns="columns"
         row-key="name"
-
       >
-      <template v-slot:body="props">
-            <q-tr @click="clickRow(props.row)">
-              <q-td v-for="col in props.cols" :key="col.name" :props="props">
-                <div v-show="col.name != 'estado'">
-                  {{ col.value }}
-                </div>
-                <div v-show="col.name == 'estado' && col.value == '1'">
-                  <q-badge color="green"> Activo </q-badge>
-                </div>
-                <div v-show="col.name == 'estado' && col.value == '2'">
-                  <q-badge color="red"> Inactivo </q-badge>
-                </div>
-              </q-td>
-              <q-td auto-width></q-td>
-            </q-tr>
-          </template>
-
+        <template v-slot:body="props">
+          <q-tr @click="clickRow(props.row)">
+            <q-td v-for="col in props.cols" :key="col.name" :props="props">
+              <div v-show="col.name != 'estado'">
+                {{ col.value }}
+              </div>
+              <div v-show="col.name == 'estado' && col.value == '1'">
+                <q-badge color="green"> Activo </q-badge>
+              </div>
+              <div v-show="col.name == 'estado' && col.value == '2'">
+                <q-badge color="red"> Inactivo </q-badge>
+              </div>
+            </q-td>
+            <q-td auto-width></q-td>
+          </q-tr>
+        </template>
       </q-table>
     </div>
 
@@ -53,12 +56,27 @@
               label="Username"
               :disable="ver"
             />
-            <q-input
+            <!-- <q-input
               filled
               v-model="fila.password"
               label="Password"
               type="password"
-            />
+            /> -->
+
+            <q-input
+              v-model="fila.password"
+              filled
+              :type="isPwd ? 'password' : 'text'"
+            >
+              <template v-slot:append>
+                <q-icon
+                  :name="isPwd ? 'visibility_off' : 'visibility'"
+                  class="cursor-pointer"
+                  @click="isPwd = !isPwd"
+                />
+              </template>
+            </q-input>
+
             <q-input
               filled
               v-model="fila.nombre"
@@ -70,6 +88,7 @@
               v-model="fila.ultimologin"
               hint="Ultimo Login"
               type="date"
+              v-show="false"
             />
             <q-select
               filled
@@ -84,14 +103,15 @@
               v-model="fila.fechacreacion"
               hint="Fecha Creacion"
               type="date"
+              v-show="false"
             />
             <q-input
               filled
               v-model="fila.fechamodificacion"
               hint="Fecha Modificacion"
               type="date"
+              v-show="false"
             />
-
 
             <div>
               <q-btn :label="accion" color="primary" type="submit" />
@@ -115,6 +135,7 @@
 import { useQuasar } from "quasar";
 import { api } from "boot/axios";
 import { ref } from "vue";
+let $q = useQuasar();
 let condition;
 const columns = [
   {
@@ -223,6 +244,8 @@ const rows = [
 export default {
   setup() {
     return {
+      isPwd: ref(true),
+
       columns,
       rows,
       date: "",
@@ -271,10 +294,10 @@ export default {
         username: row.username,
         password: row.password,
         nombre: row.nombre,
-        ultimologin: row.ultimologin,
+        ultimologin: null,
         estado: row.estado,
         fechacreacion: row.fechacreacion,
-        fechamodificacion: row.fechamodificacion,
+        fechamodificacion: null,
       };
     },
 
@@ -324,6 +347,18 @@ export default {
               fechamodificacion: "",
             };
             this.submitForm();
+                  this.submitForm();
+           if (response.data.codigomensaje == "223") {
+            $q.notify({
+              type: "negative",
+              message: "Error",
+            });
+          } else {
+            $q.notify({
+              type: "positive",
+              message: "Registro actualizado correctamente!",
+            });
+          }
           });
       }
       this.mostrarModal = false;
@@ -332,6 +367,7 @@ export default {
   },
 
   mounted() {
+    $q = useQuasar();
     this.submitForm();
   },
 };

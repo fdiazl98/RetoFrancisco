@@ -12,6 +12,7 @@ import { defineComponent } from "vue";
 import { getCssVar } from "quasar";
 import { useCounterStore } from "stores/example-store";
 import { api } from "boot/axios";
+// import { match } from "assert";
 const store = useCounterStore();
 
 export default defineComponent({
@@ -27,8 +28,8 @@ export default defineComponent({
           id: "apex-bar",
         },
         colors: [
-          getCssVar("primary"),
-          getCssVar("secondary"),
+          // getCssVar("primary"),
+          // getCssVar("secondary"),
           getCssVar("negative"),
         ],
         xaxis: {
@@ -106,15 +107,30 @@ export default defineComponent({
         console.log(monthNameLong);
 
         if (monthNameLong == "Apr") {
-          gastosAbril = gastosAbril + value.preciocompra;
+          gastosAbril =
+            Math.round(
+              (gastosAbril + value.preciocompra + Number.EPSILON) * 100
+            ) / 100;
         } else if (monthNameLong == "May") {
-          gastosMayo = gastosMayo + value.preciocompra;
+          gastosMayo =
+            Math.round(
+              (gastosMayo + value.preciocompra + Number.EPSILON) * 100
+            ) / 100;
         } else if (monthNameLong == "Jun") {
-          gastosJunio = gastosJunio + value.preciocompra;
+          gastosJunio =
+            Math.round(
+              (gastosJunio + value.preciocompra + Number.EPSILON) * 100
+            ) / 100;
         } else if (monthNameLong == "Jul") {
-          gastosJulio = gastosJulio + value.preciocompra;
+          gastosJulio =
+            Math.round(
+              (gastosJulio + value.preciocompra + Number.EPSILON) * 100
+            ) / 100;
         } else {
-          gastosAgosto = gastosAgosto + value.preciocompra;
+          gastosAgosto =
+            Math.round(
+              (gastosAgosto + value.preciocompra + Number.EPSILON) * 100
+            ) / 100;
         }
 
         // console.log(arr2);

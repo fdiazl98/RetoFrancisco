@@ -26,7 +26,11 @@
             (mostrarModal = true),
               (condition = -1),
               (accion = 'Crear'),
-              (ver = false)
+              (ver = false),
+              (verid = false),
+              (fila = {
+                id: 0,
+              })
           "
         />
         <q-table
@@ -62,7 +66,13 @@
           <div class="q-pa-md" style="max-width: 600px">
             <h5 style="width: 500px">{{ accion }}</h5>
             <q-form class="q-gutter-md" @submit.prevent="cambio">
-              <q-input filled v-model="fila.id" label="Id" :disable="ver" />
+              <q-input
+                filled
+                v-model="fila.id"
+                label="Id"
+                :disable="ver"
+                v-show="verid"
+              />
               <q-input filled v-model="fila.nombre" label="Nombre" />
               <q-select
                 filled
@@ -91,11 +101,12 @@ let condition;
 import { useQuasar } from "quasar";
 import { api } from "boot/axios";
 import { ref } from "vue";
+let $q = useQuasar();
 const columns = [
   {
     name: "id",
     required: true,
-    label: "ID",
+    label: "Id",
     align: "center",
     field: "id",
     sortable: true,
@@ -145,6 +156,7 @@ export default {
   data() {
     return {
       listado: [],
+      verid: false,
 
       fila: {
         id: "",
@@ -162,7 +174,7 @@ export default {
     clickRow(row) {
       this.accion = "Actualizar";
       this.ver = true;
-
+      this.verid = true;
       this.mostrarModal = true;
       condition = row.id;
 
@@ -198,6 +210,18 @@ export default {
         await api.post("api/Roles/Crear", this.fila).then((response) => {
           console.log(response);
           this.submitForm();
+
+           if (response.data.codigomensaje == "223") {
+            $q.notify({
+              type: "negative",
+              message: "Error, el registro ya existe",
+            });
+          } else {
+            $q.notify({
+              type: "positive",
+              message: "Registro creado!",
+            });
+          }
         });
         this.fila = {
           id: "",
@@ -215,7 +239,19 @@ export default {
             estado: "",
           };
 
+
           this.submitForm();
+           if (response.data.codigomensaje == "223") {
+            $q.notify({
+              type: "negative",
+              message: "Error",
+            });
+          } else {
+            $q.notify({
+              type: "positive",
+              message: "Registro actualizado correctamente!",
+            });
+          }
         });
       }
       this.mostrarModal = false;
@@ -227,6 +263,7 @@ export default {
   },
 
   mounted() {
+    $q = useQuasar();
     this.submitForm();
   },
 };

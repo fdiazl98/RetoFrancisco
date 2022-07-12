@@ -9,7 +9,12 @@
         (mostrarModal = true),
           (condition = -1),
           (accion = 'Crear'),
-          (ver = false)
+          (ver = false),
+          (verid = false),
+          (fila = {
+            id: 0,
+            fechahora: null,
+          })
       "
     />
     <q-table
@@ -100,9 +105,17 @@
         <div class="q-pa-md" style="max-width: 600px">
           <h5 style="width: 500px">{{ accion }}</h5>
           <q-form class="q-gutter-md" @submit.prevent="cambio">
-            <q-input filled v-model="fila.id" label="Id" :disable="ver" type="number" />
+            <q-input
+              filled
+              v-model="fila.id"
+              label="Id"
+              :disable="ver"
+              type="number"
+              v-show="verid"
+            />
 
             <q-input
+              v-show="false"
               filled
               v-model="fila.fechahora"
               hint="Fecha y hora"
@@ -172,6 +185,8 @@
 import { api } from "boot/axios";
 import { ref } from "vue";
 import { useCounterStore } from "stores/example-store";
+import { useQuasar } from "quasar";
+let $q = useQuasar();
 
 const columns = [
   {
@@ -285,6 +300,7 @@ export default {
       mostrarModal: false,
       accion: "",
       ver: false,
+      verid: false,
     };
   },
 
@@ -294,6 +310,7 @@ export default {
       // console.log(row);
       this.accion = "Actualizar";
       this.ver = true;
+      this.verid = true;
       this.mostrarModal = true;
       condition = 1;
       this.fila = {
@@ -307,7 +324,7 @@ export default {
         estado: row.estado,
       };
 
-      console.log("esto es fila :" + this.fila);
+      // console.log("esto es fila :" + this.fila);
     },
 
     async submitForm() {
@@ -332,15 +349,15 @@ export default {
 
         // console.log(value);
       });
-      console.log(arr);
-      console.log(arr2);
+      // console.log(arr);
+      // console.log(arr2);
 
       store.ejex = arr;
-      console.log(store.ejex);
+      // console.log(store.ejex);
       store.ejey = arr2;
-      console.log(store.ejey);
+      // console.log(store.ejey);
       store.estadoVector = estadoV;
-      console.log(store.estadoVector);
+      // console.log(store.estadoVector);
 
       // rows=lista
     },
@@ -355,8 +372,19 @@ export default {
 
         this.mostrarModal = true;
         await api.post("api/Movimiento/Crear", this.fila).then((response) => {
-          console.log(response);
+          // console.log(response);
           this.submitForm();
+          if (response.data.codigomensaje == "223") {
+            $q.notify({
+              type: "negative",
+              message: "Error, el registro ya existe",
+            });
+          } else {
+            $q.notify({
+              type: "positive",
+              message: "Registro creado!",
+            });
+          }
         });
       } else {
         //  return editar='editar'
@@ -364,7 +392,7 @@ export default {
         await api
           .post("api/Movimiento/Actualizar", this.fila)
           .then((response) => {
-            console.log(response);
+            // console.log(response);
 
             this.fila = {
               idTipomovimiento: "",
@@ -378,13 +406,25 @@ export default {
               estado: "",
             };
             this.submitForm();
+            if (response.data.codigomensaje == "227") {
+              $q.notify({
+                type: "negative",
+                message: "Error, Datos referenciados no existen",
+              });
+            } else {
+              $q.notify({
+                type: "positive",
+                message: "Registro actualizado!",
+              });
+            }
           });
       }
       this.mostrarModal = false;
       this.condition = "";
     },
   },
-  created() {
+  mounted() {
+    $q = useQuasar();
     this.submitForm();
   },
   beforeCreate() {

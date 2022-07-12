@@ -33,6 +33,7 @@ export const useCounterStore = defineStore("counter", {
       localStorage.removeItem("token");
       this.isAuthenticated = false;
       localStorage.removeItem("username");
+      localStorage.removeItem("password");
     },
 
     init() {

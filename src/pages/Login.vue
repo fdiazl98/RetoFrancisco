@@ -39,8 +39,7 @@
         <q-card-section>
           <q-form class="q-gutter-md" @submit.prevent="submitForm">
             <q-input label="Username" v-model="login.username"> </q-input>
-            <q-input label="Password" v-model="login.password">
-            </q-input>
+            <q-input label="Password" v-model="login.password"> </q-input>
             <div>
               <q-btn
                 class="full-width"
@@ -117,11 +116,18 @@ export default {
           });
 
           console.log("login correct");
-        } catch {
+        } catch (err) {
           $q.notify({
             type: "negative",
             message: "error de ingreso",
           });
+
+          if (err.response.data.detail) {
+            $q.notify({
+              type: "negative",
+              message: err,
+            });
+          }
         }
 
         // window.location.href = "/#/index";
