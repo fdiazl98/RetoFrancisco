@@ -13,7 +13,7 @@
 
     <div class="q-pa-md">
       <q-table
-        title="Articulos"
+        title="Categoria"
         :rows="listado"
         :columns="columns"
         :row-key="name"
@@ -51,21 +51,30 @@
         <div class="q-pa-md" style="max-width: 600px">
           <h5 style="width: 500px">{{ accion }}</h5>
           <q-form class="q-gutter-md" @submit.prevent="CreateRow">
+            <q-input
+              v-show="showId"
+              :disable="disable"
+              filled
+              v-model="fila.id"
+              label="Id"
+            />
+
             <q-input filled v-model="fila.descripcion" label="Descripcion" />
             <q-input
               filled
+              v-show="false"
               v-model="fila.fechacreacion"
               hint="Fecha de creacion"
               type="date"
             />
             <q-input
+              v-show="false"
               filled
               v-model="fila.fechamodificacion"
               type="date"
               hint="Fecha de modificacion"
             />
             <q-input filled v-model="fila.foto" label="Foto" />
-            <q-input filled v-model="fila.id" label="Id" />
             <q-select
               filled
               v-model="fila.estado"
@@ -97,7 +106,7 @@
 const columns = [
   {
     name: "id",
-    label: "Id de articulo",
+    label: "Id",
     align: "center",
     field: "id",
     sortable: true,
@@ -143,11 +152,12 @@ import { useQuasar } from "quasar";
 // import { ref } from "@vue/reactivity";
 import { api } from "boot/axios";
 // import { mapActions } from "vuex";
+// const $q = useQuasar();
+let $q;
 
 export default {
   setup() {
     // const lista = ref(null);
-    // const $q = useQuasar();
     return {
       columns,
       date: "",
@@ -178,6 +188,8 @@ export default {
       },
       accion: "",
       mostrarModal: false,
+      showId: true,
+      disable: true,
     };
   },
   methods: {
@@ -197,9 +209,20 @@ export default {
         .post(`api/Categorias/${this.accion}`, this.fila)
         .then((response) => {
           console.log(response);
+          if (response.data.codigomensaje == "223") {
+            $q.notify({
+              type: "negative",
+              message: `Error en crear, !registro existente¡`,
+            });
+          } else {
+            $q.notify({
+              type: "positive",
+              message: `Éxito en ${this.accion} registro`,
+            });
+          }
           this.submitForm();
           this.fila = {
-            id: 5,
+            id: 0,
             descripcion: "",
             foto: "",
             fechacreacion: "",
@@ -210,32 +233,36 @@ export default {
         });
     },
     clickAgregar() {
+      this.showId = false;
+      this.disable = true;
       this.accion = "Crear";
       this.mostrarModal = true;
       this.fila = {
-        id: 5,
+        id: 0,
         descripcion: "",
         foto: "",
-        fechacreacion: "",
-        fechamodificacion: "",
+        fechacreacion: null,
+        fechamodificacion: null,
         estado: "",
       };
     },
     clickRow(row) {
-      console.log(row);
+      this.showId = true;
+      this.disable = true;
       this.accion = "Actualizar";
       this.mostrarModal = true;
       this.fila = {
         id: row.id,
         descripcion: row.descripcion,
         fechacreacion: row.fechacreacion,
-        fechamodificacion: row.fechamodificacion,
+        fechamodificacion: null,
         foto: row.foto,
         estado: row.estado,
       };
     },
   },
   mounted() {
+    $q = useQuasar();
     this.submitForm();
   },
 };

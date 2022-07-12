@@ -104,7 +104,7 @@ export default defineComponent({
           // day: "numeric",
         }).format(new Date(value.fechacreacion));
         monthNameLong = monthNameLong.toString();
-        console.log(monthNameLong);
+        // console.log(monthNameLong);
 
         if (monthNameLong == "Apr") {
           gastosAbril =

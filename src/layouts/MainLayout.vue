@@ -2,7 +2,7 @@
   <q-layout view="lHh Lpr lff">
     <q-header elevated class="bg-cyan-9">
       <q-toolbar>
-        <q-toolbar-title>Header</q-toolbar-title>
+        <q-toolbar-title>Reto App</q-toolbar-title>
         <q-btn stretch flat to="/login" @click="logout">Salir</q-btn>
         <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
       </q-toolbar>

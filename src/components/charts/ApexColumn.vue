@@ -29,7 +29,7 @@ export default defineComponent({
           id: "apex-column",
         },
         colors: [
-          getCssVar("primary"),
+          getCssVar("accent"),
           getCssVar("secondary"),
           getCssVar("negative"),
         ],

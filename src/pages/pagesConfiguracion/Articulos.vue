@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <div class="q-pa-md">
-      <div class="q-gutter-md" style="max-width: 300px"></div>
+      <!-- <div class="q-gutter-md" style="max-width: 300px"></div> -->
       <q-btn
         label="Agregar"
         type="submit"
@@ -25,7 +25,7 @@
                 v-show="col.name != 'foto'"
                 v-if="col.name == 'estado' && col.value == '1'"
               >
-                <q-badge color="green"> Activo </q-badge>
+                 <q-badge color="green"> Activo </q-badge>
               </div>
               <div
                 v-show="col.name != 'foto'"
@@ -51,25 +51,50 @@
         <div class="q-pa-md" style="max-width: 600px">
           <h5 style="width: 500px">{{ accion }}</h5>
           <q-form class="q-gutter-md" @submit.prevent="CreateRow">
+            <q-input
+              v-show="showId"
+              :disable="disable"
+              filled
+              v-model="fila.id"
+              label="Id"
+            />
+
             <q-input filled v-model="fila.codigo" label="Codigo" />
             <q-input filled v-model="fila.descripcion" label="Descripcion" />
             <q-input
+              v-show="false"
               filled
               v-model="fila.fechacreacion"
               hint="Fecha de creacion"
               type="date"
             />
             <q-input
+              v-show="false"
               filled
               v-model="fila.fechamodificacion"
               type="date"
               hint="Fecha de modificacion"
             />
             <q-input filled v-model="fila.foto" label="Foto" />
-            <q-input filled v-model="fila.id" label="Id" />
             <q-input filled v-model="fila.idCategoria" label="Id Categoria" />
-            <q-input filled v-model="fila.preciocompra" label="Precio Compra" />
-            <q-input filled v-model="fila.precioventa" label="Precio Venta" />
+            <q-input
+              type="number"
+              name="points"
+              min="0"
+              step="1"
+              filled
+              v-model="fila.preciocompra"
+              label="Precio Compra"
+            />
+            <q-input
+              type="number"
+              name="points"
+              min="0"
+              step="1"
+              filled
+              v-model="fila.precioventa"
+              label="Precio Venta"
+            />
             <q-select
               filled
               v-model="fila.estado"
@@ -94,6 +119,7 @@
         </div>
       </q-card>
     </q-dialog>
+
   </q-page>
 </template>
 
@@ -109,10 +135,11 @@ const columns = [
   {
     name: "codigo",
     required: true,
-    label: "Codigo",
+    label: "codigo articulo",
     align: "center",
     field: "codigo",
     sortable: true,
+
   },
   {
     name: "descripcion",
@@ -173,14 +200,17 @@ const columns = [
 ];
 
 import { useQuasar } from "quasar";
-import { ref } from "vue";
+// import { ref } from "@vue/reactivity";
 import { api } from "boot/axios";
 // import { mapActions } from "vuex";
+// import { useStore } from "vuex";
+let $q;
 
 export default {
   setup() {
     // const lista = ref(null);
     // const $q = useQuasar();
+
     return {
       columns,
       date: "",
@@ -215,28 +245,65 @@ export default {
       },
       accion: "",
       mostrarModal: false,
+      showId: true,
+      disable: true,
     };
   },
   methods: {
-    // ...mapActions("auth", ["getData"]),
+    // ...mapActions("auth", ["setejex", "setejey"]),
     async submitForm() {
+      // const store = useStore();
       // this.listado = await this.getData(this.token);
 
       // const toPath = this.$route.query.to || "/admin";
       // this.$router.push(toPath);
       await api.get("api/Articulos/Get").then((response) => {
-        //   // commit('setMe', response.data)
+        console.log(response);
         return (this.listado = response.data);
       });
+
+      var arr = [];
+      var arr2 = [];
+      for (const iterator of this.listado) {
+        arr.push(iterator.precioventa);
+        arr2.push(iterator.codigo);
+      }
+      this.setejex(arr2);
+      this.setejey(arr);
+      console.log(this.$store.state.auth);
+
+      // commit("setejex", arr2);
+      // store.state.auth.ejey = arr2;
     },
     async CreateRow() {
       await api
         .post(`api/Articulos/${this.accion}`, this.fila)
         .then((response) => {
           console.log(response);
+          if (response.data.codigomensaje == "223") {
+            $q.notify({
+              type: "negative",
+              message: `Error en crear, !registro existente¡`,
+            });
+          } else if (response.data.codigomensaje == "228") {
+            $q.notify({
+              type: "negative",
+              message: "El código para el producto ingresado, ya existe.",
+            });
+          } else if (response.data.codigomensaje == "227") {
+            $q.notify({
+              type: "negative",
+              message: "La categoria ingresada no existe",
+            });
+          } else {
+            $q.notify({
+              type: "positive",
+              message: `Éxito en ${this.accion} registro`,
+            });
+          }
           this.submitForm();
           this.fila = {
-            id: 5,
+            id: 0,
             codigo: "",
             descripcion: "",
             foto: "",
@@ -251,23 +318,26 @@ export default {
         });
     },
     clickAgregar() {
+      this.showId = false;
+      this.disable = true;
       this.accion = "Crear";
       this.mostrarModal = true;
       this.fila = {
-        id: 5,
+        id: 0,
         codigo: "",
         descripcion: "",
         foto: "",
         idCategoria: null,
         preciocompra: null,
         precioventa: null,
-        fechacreacion: "",
-        fechamodificacion: "",
+        fechacreacion: null,
+        fechamodificacion: null,
         estado: "",
       };
     },
     clickRow(row) {
-      console.log(row);
+      this.showId = true;
+      this.disable = true;
       this.accion = "Actualizar";
       this.mostrarModal = true;
       this.fila = {
@@ -275,7 +345,7 @@ export default {
         codigo: row.codigo,
         descripcion: row.descripcion,
         fechacreacion: row.fechacreacion,
-        fechamodificacion: row.fechamodificacion,
+        fechamodificacion: null,
         foto: row.foto,
         idCategoria: row.idCategoria,
         preciocompra: row.preciocompra,
@@ -285,6 +355,8 @@ export default {
     },
   },
   mounted() {
+    $q = useQuasar();
+
     this.submitForm();
   },
 };

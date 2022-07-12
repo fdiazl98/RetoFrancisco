@@ -39,7 +39,21 @@
         <q-card-section>
           <q-form class="q-gutter-md" @submit.prevent="submitForm">
             <q-input label="Username" v-model="login.username"> </q-input>
-            <q-input label="Password" v-model="login.password"> </q-input>
+            <!-- <q-input label="Password" v-model="login.password"> </q-input> -->
+
+            <q-input
+              v-model="login.password"
+              :type="isPwd ? 'password' : 'text'"
+            >
+              <template v-slot:append>
+                <q-icon
+                  :name="isPwd ? 'visibility_off' : 'visibility'"
+                  class="cursor-pointer"
+                  @click="isPwd = !isPwd"
+                />
+              </template>
+            </q-input>
+
             <div>
               <q-btn
                 class="full-width"
@@ -68,6 +82,7 @@
 import { useQuasar } from "quasar";
 import { useCounterStore } from "stores/example-store";
 import { api } from "boot/axios";
+import { ref } from "vue";
 
 // import { mapActions } from "vuex";
 let $q = useQuasar();
@@ -76,6 +91,7 @@ export default {
   name: "Login",
   data() {
     return {
+      isPwd: ref(true),
       login: {
         username: "",
         password: "",
@@ -119,15 +135,8 @@ export default {
         } catch (err) {
           $q.notify({
             type: "negative",
-            message: "error de ingreso",
+            message: "Error de ingreso, Verifique los datos",
           });
-
-          if (err.response.data.detail) {
-            $q.notify({
-              type: "negative",
-              message: err,
-            });
-          }
         }
 
         // window.location.href = "/#/index";

@@ -80,7 +80,7 @@ export default defineComponent({
         // console.log(value);
       });
       estadoV=[pos, neg];
-      console.log(estadoV);
+      // console.log(estadoV);
       // console.log(this.series);
       this.series = estadoV;
 

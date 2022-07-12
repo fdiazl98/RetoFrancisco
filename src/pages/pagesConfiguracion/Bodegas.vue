@@ -35,13 +35,13 @@
                 v-show="col.name != 'foto'"
                 v-if="col.name == 'estado' && col.value == '1'"
               >
-                <q-badge color="green"> Activo </q-badge>
+                 <q-badge color="green"> Activo </q-badge>
               </div>
               <div
                 v-show="col.name != 'foto'"
                 v-if="col.name == 'estado' && col.value == '2'"
               >
-                <q-badge color="red"> Inactivo </q-badge>
+                 <q-badge color="red"> Inactivo </q-badge>
               </div>
               <div v-show="col.name != 'foto'" v-if="col.name != 'estado'">
                 {{ col.value }}
@@ -61,22 +61,30 @@
         <div class="q-pa-md" style="max-width: 600px">
           <h5 style="width: 500px">{{ accion }}</h5>
           <q-form class="q-gutter-md" @submit.prevent="CreateRow">
+            <q-input
+              v-show="showId"
+              :disable="disable"
+              filled
+              v-model="fila.id"
+              label="Id"
+            />
             <q-input filled v-model="fila.codigo" label="Codigo" />
             <q-input filled v-model="fila.descripcion" label="Descripcion" />
             <q-input
+              v-show="false"
               filled
               v-model="fila.fechacreacion"
               hint="Fecha de creacion"
               type="date"
             />
             <q-input
+              v-show="false"
               filled
               v-model="fila.fechamodificacion"
               type="date"
               hint="Fecha de modificacion"
             />
             <q-input filled v-model="fila.foto" label="Foto" />
-            <q-input filled v-model="fila.id" label="Id" />
             <q-select
               filled
               v-model="fila.estado"
@@ -106,13 +114,6 @@
 
 <script>
 const columns = [
-    {
-    name: "id",
-    label: "Id",
-    align: "center",
-    field: "id",
-    sortable: true,
-  },
   {
     name: "codigo",
     required: true,
@@ -149,7 +150,13 @@ const columns = [
     field: "foto",
     sortable: true,
   },
-
+  {
+    name: "id",
+    label: "Id",
+    align: "center",
+    field: "id",
+    sortable: true,
+  },
   {
     name: "estado",
     label: "Estado",
@@ -160,8 +167,10 @@ const columns = [
 ];
 
 import { useQuasar } from "quasar";
-import { ref } from "vue";
+// import { ref } from "@vue/reactivity";
 import { api } from "boot/axios";
+// import { mapActions } from "vuex";
+let $q;
 
 export default {
   setup() {
@@ -194,10 +203,12 @@ export default {
         fechamodificacion: "",
         foto: "",
         id: "",
-        estado:""
+        estado: "",
       },
       accion: "",
       mostrarModal: false,
+      showId: true,
+      disable: true,
     };
   },
   methods: {
@@ -216,7 +227,23 @@ export default {
       await api
         .post(`api/Bodegas/${this.accion}`, this.fila)
         .then((response) => {
-          console.log(response);
+          console.log(response.data);
+          if (response.data.codigomensaje == "223") {
+            $q.notify({
+              type: "negative",
+              message: `Error en crear, !registro existente¡`,
+            });
+          } else if (response.data.codigomensaje == "229") {
+            $q.notify({
+              type: "negative",
+              message: "El código para la bodega ingresada, ya existe.",
+            });
+          } else {
+            $q.notify({
+              type: "positive",
+              message: `Éxito en ${this.accion} registro`,
+            });
+          }
           this.submitForm();
           this.fila = {
             codigo: "",
@@ -224,41 +251,46 @@ export default {
             fechacreacion: "",
             fechamodificacion: "",
             foto: "",
-            id: "",
-            estado:""
+            id: 0,
+            estado: "",
           };
           this.mostrarModal = false;
         });
     },
     clickAgregar() {
+      this.showId = false;
+      this.disable = true;
       this.accion = "Crear";
       this.mostrarModal = true;
       this.fila = {
         codigo: "",
         descripcion: "",
-        fechacreacion: "",
-        fechamodificacion: "",
+        fechacreacion: null,
+        fechamodificacion: null,
         foto: "",
-        id: "",
-        estado:""
+        id: 0,
+        estado: "",
       };
     },
     clickRow(row) {
-      console.log(row);
+      this.showId = true;
+      this.disable = true;
       this.accion = "Actualizar";
       this.mostrarModal = true;
       this.fila = {
         codigo: row.codigo,
         descripcion: row.descripcion,
         fechacreacion: row.fechacreacion,
-        fechamodificacion: row.fechamodificacion,
+        fechamodificacion: null,
         foto: row.foto,
         id: row.id,
-        estado:row.estado
+        estado: row.estado,
       };
     },
   },
-  beforeMount() {
+  // beforeMount() {
+  mounted() {
+    $q = useQuasar();
     this.submitForm();
   },
 };
@@ -267,6 +299,6 @@ export default {
 img {
   border-radius: 4px;
   padding: 5px;
-  width: 100px;
+  width: 150px;
 }
 </style>

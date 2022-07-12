@@ -382,7 +382,7 @@ export default {
           } else {
             $q.notify({
               type: "positive",
-              message: "Registro creado!",
+              message: "Registro creado correctamente",
             });
           }
         });
@@ -414,7 +414,7 @@ export default {
             } else {
               $q.notify({
                 type: "positive",
-                message: "Registro actualizado!",
+                message: "Registro actualizado correctamente!",
               });
             }
           });
