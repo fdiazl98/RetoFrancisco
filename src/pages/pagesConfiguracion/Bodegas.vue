@@ -35,19 +35,23 @@
                 v-show="col.name != 'foto'"
                 v-if="col.name == 'estado' && col.value == '1'"
               >
-                 <q-badge color="green"> Activo </q-badge>
+                <q-badge color="green"> Activo </q-badge>
               </div>
               <div
                 v-show="col.name != 'foto'"
                 v-if="col.name == 'estado' && col.value == '2'"
               >
-                 <q-badge color="red"> Inactivo </q-badge>
+                <q-badge color="red"> Inactivo </q-badge>
               </div>
               <div v-show="col.name != 'foto'" v-if="col.name != 'estado'">
                 {{ col.value }}
               </div>
               <div v-show="col.name == 'foto'">
-                <img :src="col.value" alt="" />
+                <img
+                  :src="col.value"
+                  alt=""
+                  style="border-radius: 4px; padding: 5px; width: 100px"
+                />
               </div>
             </q-td>
             <q-td auto-width></q-td>
@@ -115,6 +119,13 @@
 <script>
 const columns = [
   {
+    name: "id",
+    label: "Id",
+    align: "center",
+    field: "id",
+    sortable: true,
+  },
+  {
     name: "codigo",
     required: true,
     label: "codigo articulo",
@@ -150,13 +161,7 @@ const columns = [
     field: "foto",
     sortable: true,
   },
-  {
-    name: "id",
-    label: "Id",
-    align: "center",
-    field: "id",
-    sortable: true,
-  },
+
   {
     name: "estado",
     label: "Estado",
@@ -289,16 +294,16 @@ export default {
     },
   },
   // beforeMount() {
-  mounted() {
+  created() {
     $q = useQuasar();
     this.submitForm();
   },
 };
 </script>
-<style>
+<!-- <style>
 img {
   border-radius: 4px;
   padding: 5px;
   width: 150px;
 }
-</style>
+</style> -->

@@ -23,7 +23,7 @@ export default defineComponent({
       options: {
         labels: [ "Activos","Inactivos",],
         title: {
-          text: "Estado Movimientos",
+          text: "Estado Usuarios",
           align: "left",
         },
         chart: {
@@ -52,7 +52,7 @@ export default defineComponent({
   methods: {
     async dona() {
       const store = useCounterStore();
-      await api.get("api/Movimiento/get").then((response) => {
+      await api.get("api/Usuarios/get").then((response) => {
         // console.log(
         //   "0========================prueba============================"
         // );

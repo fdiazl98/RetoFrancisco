@@ -25,19 +25,23 @@
                 v-show="col.name != 'foto'"
                 v-if="col.name == 'estado' && col.value == '1'"
               >
-                 <q-badge color="green"> Activo </q-badge>
+                <q-badge color="green"> Activo </q-badge>
               </div>
               <div
                 v-show="col.name != 'foto'"
                 v-if="col.name == 'estado' && col.value == '2'"
               >
-                 <q-badge color="red"> Inactivo </q-badge>
+                <q-badge color="red"> Inactivo </q-badge>
               </div>
               <div v-show="col.name != 'foto'" v-if="col.name != 'estado'">
                 {{ col.value }}
               </div>
               <div v-show="col.name == 'foto'">
-                <img :src="col.value" alt="" />
+                <img
+                  :src="col.value"
+                  alt=""
+                  style="border-radius: 4px; padding: 5px; width: 100px"
+                />
               </div>
             </q-td>
             <q-td auto-width></q-td>
@@ -119,7 +123,6 @@
         </div>
       </q-card>
     </q-dialog>
-
   </q-page>
 </template>
 
@@ -139,7 +142,6 @@ const columns = [
     align: "center",
     field: "codigo",
     sortable: true,
-
   },
   {
     name: "descripcion",
@@ -361,10 +363,10 @@ export default {
   },
 };
 </script>
-<style>
+<!-- <style>
 img {
   border-radius: 4px;
   padding: 5px;
   width: 150px;
 }
-</style>
+</style> -->

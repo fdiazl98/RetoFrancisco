@@ -37,7 +37,7 @@
                 {{ col.value }}
               </div>
               <div v-show="col.name == 'foto'">
-                <img :src="col.value" alt="" />
+                <img :src="col.value" alt="" style="border-radius: 4px; padding: 5px; width: 100px"/>
               </div>
             </q-td>
             <q-td auto-width></q-td>
@@ -267,10 +267,10 @@ export default {
   },
 };
 </script>
-<style>
+<!-- <style>
 img {
   border-radius: 4px;
   padding: 5px;
   width: 150px;
 }
-</style>
+</style> -->

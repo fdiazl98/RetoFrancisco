@@ -31,13 +31,13 @@
             <q-item-section> Inicio </q-item-section>
           </q-item>
 
-          <q-item clickable v-ripple to="/Roles" active-class="my-menu-link">
+          <!-- <q-item clickable v-ripple to="/Roles" active-class="my-menu-link">
             <q-item-section avatar>
               <q-icon name="star" />
             </q-item-section>
 
             <q-item-section> Roles </q-item-section>
-          </q-item>
+          </q-item> -->
 
           <!-- configuraciones-->
           <q-list class="rounded-borders">

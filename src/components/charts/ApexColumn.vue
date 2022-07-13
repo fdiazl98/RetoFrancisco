@@ -35,6 +35,9 @@ export default defineComponent({
         ],
         xaxis: {
           categories: [],
+            title: {
+            text: "Id",
+          },
         },
         yaxis: {
           title: {
