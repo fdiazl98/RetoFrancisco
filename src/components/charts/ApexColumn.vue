@@ -54,7 +54,7 @@ export default defineComponent({
       },
       series: [
         {
-          name: "series-1",
+          name: "Cantidad",
           data: [],
         },
       ],

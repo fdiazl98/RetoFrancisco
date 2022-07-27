@@ -25,6 +25,9 @@ export default defineComponent({
           height: 300,
           type: "area",
         },
+         dataLabels: {
+              enabled: false
+            },
         colors: [
           getCssVar("primary"),
           // getCssVar("secondary"),
@@ -101,9 +104,7 @@ export default defineComponent({
               Number.EPSILON) *
               100
           ) / 100;
-        //if (!meses.includes(monthNameLong)) meses.push(monthNameLong);
 
-        // this.series[0].data.push(value.precioventa);
       });
       this.series[0].data = mesesIngresos;
       this.series[1].data = mesesGastos;
@@ -115,7 +116,7 @@ export default defineComponent({
       // console.log("xaxis" + JSON.stringify(this.options.xaxis));
     },
   },
-  mounted() {
+  created() {
     this.colum();
   },
 });
