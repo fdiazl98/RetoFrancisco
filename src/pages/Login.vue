@@ -118,7 +118,7 @@ export default {
         $q.localStorage.set("username", this.login.username);
         $q.localStorage.set("password", JSON.stringify(this.login.password));
         try {
-          await api.post("/api/Login", this.login).then((response) => {
+          await api.post("api/Login", this.login).then((response) => {
             const prueba = response.data.token;
             console.log(response.data);
             console.log(prueba);

@@ -12,7 +12,6 @@ export default defineComponent({
 
   beforeCreate() {
     const store = useCounterStore();
-
     store.init();
     const token = localStorage.getItem("token");
     console.log(token)
